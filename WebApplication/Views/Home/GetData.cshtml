@@ -1,0 +1,79 @@
+﻿<script type="text/javascript">
+    function saveDescription(id) {
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("EditDescription", "Home")",
+            data: {
+                id: id,
+                description: document.getElementById("id_"+id).value,
+            }
+        });
+    }
+    function Delete(id) {
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("Delete", "Home")",
+            data: {
+                id: id,
+                page: @ViewBag.CurrantPage,
+            },
+            success: function(html){
+                document.getElementById('refresh').submit()
+            }
+        });
+    }
+</script>
+
+<h2>Просмотр базы данных!</h2>
+
+<!--Форма для перезагрузки страницы после AJAX, с контроллера не хочет редиректить нормально-->
+<form method="post" action="GetData" id="refresh">
+    <input type="hidden" value="@ViewBag.CurrantPage" name="Page" />
+</form>
+
+<div class="container" style="text-align: center;">
+    <p>Страница: @ViewBag.CurrantPage</p>
+    <div style="max-width:130pt;margin: auto;">
+        <form method="post" action="GetData" style="float:left;">
+            <input type="hidden" value="@ViewBag.PreviousPage" name="Page" />
+            <input type="submit" value="Назад" class="btn btn-info" />
+        </form>
+
+        <form method="post" action="GetData" style="float:right;">
+            <input type="hidden" value="@ViewBag.NextPage" name="Page" />
+            <input type="submit" value="Вперед" class="btn btn-info" />
+        </form>
+    </div>
+</div>
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>Удалить</th>
+            <th>#</th>
+            <th>Номер документа</th>
+            <th>Вид торгов</th>
+            <th>Наименование организации</th>
+            <th>Примечание</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var Data in ViewBag.Data)
+        {
+        <tr>
+            <td>
+                <a href="#"><img style="width:35pt;" src='@Url.Content("~/img/delete.png")' onclick="Delete(@Data.id)" /></a>
+            </td>
+            <td><p>@Data.id</p></td>
+            <td><a href="@Url.Action("GetDataDetails", "Home", new { id = Data.id})"><p>@Data.notificationNumber</p></a></td>
+            <td><p>@Data.notificationType</p></td>
+            <td><p>@Data.organizationName</p></td>
+            <td>
+                <div class="form-group shadow-textarea">
+                    <textarea class="form-control z-depth-1" style ="width:350pt;" id="id_@Data.id" rows="3" placeholder="Место для заметки" onchange="saveDescription(@Data.id)">@Data.description</textarea>
+                </div>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,63 @@
+﻿<script type="text/javascript">
+    function loadData() {
+        if (document.getElementById("inputDateStart").value == "" || document.getElementById("inputDateEnd").value == "")
+        {
+            alert("Дата не может быть пустая!");
+            return 0;
+        }
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("LoadData", "Home")",
+            data: {
+                dateStart: document.getElementById("inputDateStart").value,
+                dateEnd: document.getElementById("inputDateEnd").value,
+                type: document.getElementById("notificationType").value,
+            }
+        });
+        alert("Запрос выполняется, когда он выполнится вы сможете увидеть результат на странице 'Просмотр данных'.\nВыполнение запроса может занять достаточно много времени, потерпите!");
+    }
+</script>
+
+<h2>Загрузка данных с API сервиса</h2>
+
+<div class="control-group">
+    <label class="control-label" for="inputDateStart">Начало периода</label>
+    <div class="controls">
+        <input type="date" id="inputDateStart">
+    </div>
+</div>
+
+<div class="control-group">
+    <label class="control-label" for="inputDateEnd">Конец периода</label>
+    <div class="controls">
+        <input type="date" id="inputDateEnd">
+    </div>
+</div>
+
+<div class="control-group">
+    <label class="control-label" for="notificationType">Вид торгов</label>
+    <div class="controls">
+        <select id="notificationType">
+            <option value="1">Аренда, безвозмездное пользование, доверительное управление имуществом, иные договоры, предусматривающие передачу прав владения и пользования в отношении государственного и муниципального имущества</option>
+            <option value="2">Аренда и продажа земельных участков</option>
+            <option value="3">Строительство</option>
+            <option value="4">Охотхозяйственные соглашения</option>
+            <option value="5">Пользование участками недр</option>
+            <option value="6">Государственно-частное партнерство (соглашения о ГЧП/МЧП, концессионные соглашения)</option>
+            <option value="7">Аренда лесных участков и продажа лесных насаждений</option>
+            <option value="8">Продажа государственного и муниципального имущества</option>
+            <option value="9">Передача прав на единые технологии</option>
+            <option value="10">Водопользование</option>
+            <option value="11">Рыболовство и добыча водных биоресурсов</option>
+            <option value="12">ЖКХ</option>
+            <option value="13">Реализация имущества должников</option>
+            <option value="14">Создание искусственных земельных участков</option>
+            <option value="15">Размещение рекламных конструкций</option>
+            <option value="16">Продажа объектов электроэнергетики</option>
+            <option value="17">Лицензии на оказание услуг связи</option>
+        </select>
+    </div>
+</div>
+
+<br />
+<input onclick="loadData()" type="button" value="Загрузить" class="btn btn-primary"/>
